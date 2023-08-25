@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-   baseURL: 'http://127.0.0.1:8000'
+   baseURL: 'https://leave-management-ff3f7fbc7522.herokuapp.com/'
 });
