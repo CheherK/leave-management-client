@@ -13,7 +13,7 @@ const StatBox = ({ title, subtitle, progress, progessColor, icon }) => {
          alignItems="center"
          justifyContent="space-between"
          borderRadius="12px"
-         minWidth="300px"
+         minWidth="250px"
          padding="20px"
          flex='1'
       >

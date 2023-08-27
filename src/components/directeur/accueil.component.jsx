@@ -11,7 +11,7 @@ import UsersOnLeave from "../users-on-leave.component";
 const Acceuil = () => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
-   const { userInfo: { leaveBalance } } = useUser();
+   const { userInfo: { leaveBalance }, usersNumber, usersOnLeaveNumber } = useUser();
 
    return (
       <Box m="15px">
@@ -32,9 +32,10 @@ const Acceuil = () => {
                }
             />
             <StatBox
-               title="10"
+               title={usersOnLeaveNumber ? usersOnLeaveNumber : 0}
                subtitle="Utilisateurs en congé"
-               progress={10 / 100}
+               progress={usersOnLeaveNumber / usersNumber}
+               progessColor={colors.redAccent[600]}
                icon={
                   <GroupRemoveOutlinedIcon
                      sx={{ color: colors.greenAccent[600], fontSize: "46px" }}
