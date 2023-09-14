@@ -1,25 +1,25 @@
-import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useMediaQuery, useTheme } from "@mui/material";
-import SidebarItem from "./sidebar-item.component";
-import { tokens } from "../theme";
-import useSidebar from "../hooks/useSidebar";
-import { useDispatch } from "react-redux";
-import { setIsCollapsed } from "../store/sidebar/sidebar.reducer";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import 'react-pro-sidebar/dist/css/styles.css';
-import { useEffect } from "react";
+import { useState } from "react"; // Import useState hook from React
+import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar"; // Import components from react-pro-sidebar library
+import { Box, IconButton, Typography, useMediaQuery, useTheme } from "@mui/material"; // Import MUI components
+import SidebarItem from "./sidebar-item.component"; // Import SidebarItem component
+import { tokens } from "../theme"; // Import theme tokens
+import useSidebar from "../hooks/useSidebar"; // Import custom hook useSidebar
+import { useDispatch } from "react-redux"; // Import useDispatch from Redux
+import { setIsCollapsed } from "../store/sidebar/sidebar.reducer"; // Import setIsCollapsed action
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined"; // Import MenuOutlinedIcon from MUI
+import 'react-pro-sidebar/dist/css/styles.css'; // Import CSS styles
+import { useEffect } from "react"; // Import useEffect from React
 
 const Sidebar = ({ routes, firstName, lastName, jobTitle }) => {
-   const theme = useTheme();
-   const colors = tokens(theme.palette.mode);
-   const { isCollapsed } = useSidebar();
-   const dispatch = useDispatch();
-   const [selected, setSelected] = useState("Accueil");
-   const isNonMobile = useMediaQuery("(min-width:600px)");
+   const theme = useTheme(); // Get the current theme
+   const colors = tokens(theme.palette.mode); // Get color tokens based on theme mode
+   const { isCollapsed } = useSidebar(); // Get isCollapsed state from custom hook
+   const dispatch = useDispatch(); // Get dispatch function from Redux
+   const [selected, setSelected] = useState("Accueil"); // State to track the selected sidebar item
+   const isNonMobile = useMediaQuery("(min-width:600px)"); // Check if the screen is non-mobile
 
    useEffect(() => {
-      dispatch(setIsCollapsed(!isNonMobile));
+      dispatch(setIsCollapsed(!isNonMobile)); // Toggle sidebar collapsed state based on screen size
    }, []);
 
    const mobileStyleOpen = !isNonMobile && !isCollapsed ? {
@@ -55,7 +55,6 @@ const Sidebar = ({ routes, firstName, lastName, jobTitle }) => {
                color: "#6870fa !important",
             },
             ...mobileStyleOpen,
-            
          }}
       >
          <ProSidebar collapsed={isCollapsed}>
@@ -132,3 +131,31 @@ const Sidebar = ({ routes, firstName, lastName, jobTitle }) => {
 };
 
 export default Sidebar;
+
+/*
+The Sidebar component represents the sidebar navigation for your application's dashboard.
+
+It uses various MUI components, such as Box, IconButton, Typography, and custom components like SidebarItem, to create the sidebar layout and functionality.
+
+It imports the useSidebar custom hook to get the isCollapsed state from the Redux store.
+
+The sidebar's appearance and behavior change based on the screen size. On non-mobile screens (isNonMobile), it displays a full-sized sidebar, and on mobile screens, it toggles between collapsed and expanded states.
+
+The useEffect hook is used to toggle the sidebar's collapsed state based on screen size.
+
+The sidebar displays a logo (ImpactDev) and menu icon that allows users to collapse/expand the sidebar on mobile screens.
+
+It also displays user information, such as profile picture, first name, and job title.
+
+The sidebar items are generated dynamically based on the routes prop, which is an array of route objects.
+
+The selected state is used to track the currently selected sidebar item.
+
+The sidebar items are generated using the map function, and each item is represented by a SidebarItem component.
+
+The mobileStyleOpen and mobileStyleClosed styles are used to adjust the sidebar's appearance on mobile screens based on its state (collapsed or expanded).
+
+The ProSidebar component from the react-pro-sidebar library is used to create the sidebar structure.
+
+Overall, the Sidebar component provides a responsive and customizable sidebar navigation for your application's dashboard.
+*/

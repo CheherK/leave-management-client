@@ -22,8 +22,11 @@ import UpdateUser from "../update-user.component";
 import { useSnackbar } from "notistack";
 
 const Utilisateurs = () => {
+   // Initialize Material-UI theme and colors
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
+   
+   // State variables
    const { isCollapsed } = useSidebar();
    const [openRegistration, setOpenRegistration] = useState(false);
    const [openUpdate, setOpenUpdate] = useState(false);
@@ -33,37 +36,36 @@ const Utilisateurs = () => {
    const dispatch = useDispatch();
    const { enqueueSnackbar } = useSnackbar();
 
-   //fetching users Data
+   // Fetching users Data
    useEffect(() => {
       const fetchData = async () => {
          try {
             const response = await axios.get(GET_ALL_USERS_URL);
             setUsers(response.data);
          } catch (error) {
-            console.log(error);
-            return [];
+            console.error("Error fetching users:", error);
          }
       };
       fetchData();
    }, [refresh]);
 
-   //Block user handler
+   // Block/unblock user handler
    const handleBlockUser = async (id, isActive) => {
       try {
          await axios.patch(UPDATE_USER_BY_ID(id), { isActive: !isActive });
          enqueueSnackbar('La modification a été réalisée avec succès.', { variant: 'success' });
          setRefresh(!refresh);
       } catch (error) {
-         console.log(error);
+         console.error("Error updating user status:", error);
       }
    };
 
-   //place the setOpenUpdate inside the useEffect to ensure that the selectedUser is set before displaying the UserUpdate Dialog.
+   // Place the setOpenUpdate inside the useEffect to ensure that the selectedUser is set before displaying the UserUpdate Dialog.
    useEffect(() => {
       selectedUser && setOpenUpdate(true);
    }, [selectedUser]);
 
-   //Registration Dialog Handlers
+   // Registration Dialog Handlers
    const handleClickOpenRegistration = () => {
       setOpenRegistration(true);
    };
@@ -73,7 +75,7 @@ const Utilisateurs = () => {
       setOpenRegistration(false);
    };
 
-   //UpdateUser Dialog handlers
+   // UpdateUser Dialog handlers
    const handleClickOpenUpdate = (row) => {
       setSelectedUser(row);
    };
@@ -84,6 +86,7 @@ const Utilisateurs = () => {
       setSelectedUser(null);
    };
 
+   // Define columns for the DataGrid
    const columns = [
       { field: "firstName", headerName: "Nom", flex: 1, minWidth: 200, headerAlign: "center", align: "center" },
       { field: "lastName", headerName: "Prénom", flex: 1, minWidth: 200, headerAlign: "center", align: "center" },
@@ -108,6 +111,7 @@ const Utilisateurs = () => {
       { field: "childNumber", headerName: "Nombre d'enfant", flex: 1, minWidth: 150, headerAlign: "center", align: "center" },
       { field: "rib", headerName: "RIB", flex: 1, minWidth: 200, headerAlign: "center", align: "center" },
       { field: "bank", headerName: "Bank", flex: 1, minWidth: 200, headerAlign: "center", align: "center" },
+
       {
          field: "isActive",
          headerName: "Statut",
@@ -127,6 +131,7 @@ const Utilisateurs = () => {
             );
          },
       },
+      // Define custom column for actions
       {
          field: "action",
          headerName: "Action",
@@ -164,11 +169,12 @@ const Utilisateurs = () => {
       <Box m="15px">
          <Header
             title="UTILISATEURS"
-            subtitle="Liste des empolyees d'ImpactDev"
+            subtitle="Liste des employés d'ImpactDev"
          />
          <Box
             height="70vh"
             sx={{
+               // Styling for the DataGrid and other components
                "& .MuiDataGrid-root": {
                   border: "none",
                },
@@ -197,7 +203,7 @@ const Utilisateurs = () => {
                   height: '50px !important'
                },
             }
-            }
+         }
          >
             <Button
                color='success'
@@ -221,9 +227,10 @@ const Utilisateurs = () => {
             />
          </Box>
 
-         {/* registration for dialog  */}
+         {/* Registration Dialog */}
          <RegistrationDialog open={openRegistration} handleClose={handleCloseRegistration} />
-         {/* registration for dialog  */}
+
+         {/* UpdateUser Dialog */}
          <UpdateUser user={selectedUser} open={openUpdate} handleClose={handleCloseUpdate} />
       </Box >
    );

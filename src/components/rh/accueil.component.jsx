@@ -1,43 +1,49 @@
-import { Box, Typography, useTheme } from "@mui/material";
-import { tokens } from "../../theme";
-import Header from "../Header.compoent";
-import StatBox from "../stat-box.component";
-import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
-import GroupRemoveOutlinedIcon from '@mui/icons-material/GroupRemoveOutlined';
-import useUser from "../../hooks/useUser";
-import AcceptedRequests from "../accepted-requests.component";
-import UsersOnLeave from "../users-on-leave.component";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import axios from "../../../api/axios";
-import { GET_ALL_USERS_URL } from "../../../api/user-crud";
-import { setUsersNumber } from "../../store/user/user.reducer";
+import { Box, Typography, useTheme } from "@mui/material"; // Import components from Material-UI
+import { tokens } from "../../theme"; // Import theme tokens
+import Header from "../Header.compoent"; // Import Header component
+import StatBox from "../stat-box.component"; // Import StatBox component
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined'; // Import AccountBalanceWalletOutlinedIcon
+import GroupRemoveOutlinedIcon from '@mui/icons-material/GroupRemoveOutlined'; // Import GroupRemoveOutlinedIcon
+import useUser from "../../hooks/useUser"; // Import useUser hook
+import AcceptedRequests from "../accepted-requests.component"; // Import AcceptedRequests component
+import UsersOnLeave from "../users-on-leave.component"; // Import UsersOnLeave component
+import { useEffect } from "react"; // Import useEffect from React
+import { useDispatch } from "react-redux"; // Import useDispatch from React Redux
+import axios from "../../../api/axios"; // Import axios for making API requests
+import { GET_ALL_USERS_URL } from "../../../api/user-crud"; // Import URL for getting all users
+import { setUsersNumber } from "../../store/user/user.reducer"; // Import action for setting users number in Redux store
 
 const Acceuil = () => {
+   // Initialize Material-UI theme and colors
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
+
+   // Custom hook to access user information
    const { userInfo: { leaveBalance }, usersNumber, usersOnLeaveNumber } = useUser();
    const dispatch = useDispatch();
 
+   // Fetch the total number of users
    useEffect(() => {
       const fetchData = async () => {
          try {
             const usersEmptyRes = await axios.get(GET_ALL_USERS_URL);
             dispatch(setUsersNumber(usersEmptyRes?.data?.length));
          } catch (error) {
-            console.log(error);
+            console.error("Error fetching user data:", error);
          }
       };
       fetchData();
    }, []);
+
    return (
       <Box m="15px">
-         <Header title="Acceuil" subtitle="bienvenue dans votre dashboard" />
+         <Header title="Accueil" subtitle="Bienvenue dans votre dashboard" />
          <Box
             display="flex"
             flexWrap='wrap'
             gap="20px"
          >
+            {/* StatBox for Leave Balance */}
             <StatBox
                title={leaveBalance}
                subtitle="Solde de congé restant"
@@ -48,6 +54,7 @@ const Acceuil = () => {
                   />
                }
             />
+            {/* StatBox for Users on Leave */}
             <StatBox
                title={usersOnLeaveNumber ? usersOnLeaveNumber : 0}
                subtitle="Utilisateurs en congé"
@@ -63,6 +70,7 @@ const Acceuil = () => {
          <Box
             maxHeight="100vh"
             sx={{
+               // Styling for the DataGrid and other components
                "& .MuiDataGrid-root": {
                   border: "none",
                },
@@ -93,6 +101,7 @@ const Acceuil = () => {
                },
             }}
          >
+            {/* Section: Accepted Leave Requests */}
             <Typography
                variant="h5"
                color={colors.greenAccent[500]}
@@ -101,6 +110,8 @@ const Acceuil = () => {
                Les demandes de congés acceptées
             </Typography>
             <AcceptedRequests />
+
+            {/* Section: Users on Leave */}
             <Typography
                variant="h5"
                color={colors.greenAccent[500]}

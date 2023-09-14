@@ -2,71 +2,71 @@ import { Box, Chip } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Button from '@mui/material/Button';
 import { tokens } from "../../theme";
-import Header from "../Header.compoent";
+import Header from "../Header.compoent"; // Header component
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useTheme } from "@mui/material";
 import useSidebar from "../../hooks/useSidebar";
 import { useEffect, useState } from "react";
-import LeaveRequestForm from "../new-leave.component";
-import { fetchLeaveRequestsToTreatByHR, updateLeaveRequestStatus } from "../../../api/leaveRequest-crud";
-import { getDifferenceInDays } from "../../utils/getDifferenceInDays";
+import LeaveRequestForm from "../new-leave.component"; //new-leave component
+import { fetchLeaveRequestsToTreatByHR, updateLeaveRequestStatus } from "../../../api/leaveRequest-crud"; //API functions for leave requests
+import { getDifferenceInDays } from "../../utils/getDifferenceInDays"; //utility function for date calculation
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useSnackbar } from "notistack";
-
+import { useSnackbar } from "notistack"; // use of a snackbar for notifications
 
 const Demandes = () => {
    const theme = useTheme();
    const colors = tokens(theme.palette.mode);
    const { isCollapsed } = useSidebar();
-   const [open, setOpen] = useState(false);
-   const [loading, setLoading] = useState(true);
-   const [refetch, setRefetch] = useState(0);
-   const [leaveRequests, setLeaveRequests] = useState([]);
-   const { enqueueSnackbar } = useSnackbar();
+   const [open, setOpen] = useState(false); // State for handling dialog visibility
+   const [loading, setLoading] = useState(true); // State to track loading status
+   const [refetch, setRefetch] = useState(0); // State to trigger data refetch
+   const [leaveRequests, setLeaveRequests] = useState([]); // State to store leave requests
+   const { enqueueSnackbar } = useSnackbar(); // Snackbar for notifications
 
    useEffect(() => {
       const fetchData = async () => {
-         const response = await fetchLeaveRequestsToTreatByHR();
-         setLeaveRequests(response);
-         setLoading(false);
+         const response = await fetchLeaveRequestsToTreatByHR(); // Fetch leave requests from an API
+         setLeaveRequests(response); // Update leave requests state
+         setLoading(false); // Update loading state to indicate data has been loaded
       };
-      fetchData();
-   }, [refetch]);
+      fetchData(); // Fetch data when the component mounts and when refetch state changes
+   }, [refetch]); // Dependency array ensures the effect runs when refetch changes
 
    const handleAcceptance = (id) => {
       const data = {
-         status: "accepted"
+         status: "accepted" // Define data for updating leave request status
       };
       const acceptRequest = async () => {
-         await updateLeaveRequestStatus(id, data);
-         enqueueSnackbar('Demande de congé acceptée!', { variant: 'success' });
-         setRefetch(refetch+1);
+         await updateLeaveRequestStatus(id, data); // Update leave request status through an API
+         enqueueSnackbar('Demande de congé acceptée!', { variant: 'success' }); // Show a success notification
+         setRefetch(refetch+1); // Trigger data refetch to reflect the updated status
       };
-      acceptRequest();
+      acceptRequest(); // Execute the function to accept the request
    };
 
    const handleRejection = (id) => {
       const data = {
-         status: "rejected"
+         status: "rejected" // Define data for updating leave request status
       };
       const rejectRequest = async () => {
-         await updateLeaveRequestStatus(id, data);
-         enqueueSnackbar('Demande de congé réfusée!', { variant: 'error' });
-         setRefetch(refetch+1);
+         await updateLeaveRequestStatus(id, data); // Update leave request status through an API
+         enqueueSnackbar('Demande de congé réfusée!', { variant: 'error' }); // Show an error notification
+         setRefetch(refetch+1); // Trigger data refetch to reflect the updated status
       };
-      rejectRequest();
+      rejectRequest(); // Execute the function to reject the request
    };
 
    const handleClickOpen = () => {
-      setOpen(true);
+      setOpen(true); // Open the leave request form dialog
    };
 
    const handleClose = () => {
-      setOpen(false);
+      setOpen(false); // Close the leave request form dialog
    };
 
+   // Define columns for the DataGrid component
    const columns = [
       {
          field: "firstName",
@@ -100,7 +100,7 @@ const Demandes = () => {
          headerAlign: "center",
          align: "center",
          renderCell: ({ row: { startDate, endDate } }) => {
-            return getDifferenceInDays(endDate, startDate);
+            return getDifferenceInDays(endDate, startDate); // Calculate the difference in days between start and end dates
          }
       },
       { field: "reason", headerName: "Motif de congé", flex: 1, minWidth: 200, headerAlign: "center", align: "center" },
@@ -119,7 +119,7 @@ const Demandes = () => {
                case "accepted": label = "Acceptée"; color="success"; break;
                case "rejected": label = "Réfusée"; color="error"; break;
             }
-            return <Chip label={label} color={color} />;
+            return <Chip label={label} color={color} />; // Render status as a colored chip
          }
       },
       {
@@ -135,7 +135,7 @@ const Demandes = () => {
                      color='success'
                      variant="outlined"
                      startIcon={<CheckCircleOutlineOutlinedIcon />}
-                     onClick={() => handleAcceptance(id)}
+                     onClick={() => handleAcceptance(id)} // Handle accepting the request
                   >
                      Accepter
                   </Button>
@@ -143,7 +143,7 @@ const Demandes = () => {
                      color='error'
                      variant="outlined"
                      startIcon={<HighlightOffOutlinedIcon />}
-                     onClick={() => handleRejection(id)}
+                     onClick={() => handleRejection(id)} // Handle rejecting the request
                   >
                      Réfuser
                   </Button>
@@ -197,7 +197,7 @@ const Demandes = () => {
                mb="10px"
                variant="contained"
                startIcon={<AddCircleOutlineOutlinedIcon />}
-               onClick={handleClickOpen}
+               onClick={handleClickOpen} // Handle opening the leave request form dialog
             >
                Nouveau demande
             </Button>
@@ -209,7 +209,7 @@ const Demandes = () => {
                   NoRowsOverlay: () =>
                      loading &&
                      <Box sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        <CircularProgress color='success' size={100} />
+                        <CircularProgress color='success' size={100} /> {/* Show a loading spinner */}
                      </Box>
                }}
                getRowId={(row) => row.id}
@@ -221,7 +221,7 @@ const Demandes = () => {
                }
             />
          </Box>
-         <LeaveRequestForm open={open} handleClose={handleClose} />
+         <LeaveRequestForm open={open} handleClose={handleClose} /> {/* Render the leave request form */}
       </Box >
    );
 };
