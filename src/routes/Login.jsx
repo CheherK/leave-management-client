@@ -155,7 +155,7 @@ const Login = () => {
                      <Copyright sx={{ mt: 5 }} />
                   </Box>
                </Box>
-               <Box display="flex" justifyContent="space-between" px="10px">
+               <Box display="flex" justifyContent="space-between" px="10px" flexWrap="wrap">
                   <Box>
                      <h5>HR Account:</h5>
                      <p>Email: impactdev3@gmail.com</p>
