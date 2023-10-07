@@ -1,13 +1,19 @@
-import { useState } from 'react'; // Import useState hook from React
+import { useEffect, useState } from 'react'; // Import useState hook from React
 import Sidebar from "../components/sidebar.component"; // Import Sidebar component
 import Topbar from "../components/topbar.component"; // Import Topbar component
-import { Route, Routes } from 'react-router-dom'; // Import Route and Routes components from react-router-dom
+import { Route, Routes, useNavigate } from 'react-router-dom'; // Import Route and Routes components from react-router-dom
 import DIRECTEUR_ROUTES from '../constants/directeur-routes'; // Import DIRECTEUR_ROUTES (array of routes)
 import useUser from '../hooks/useUser'; // Import useUser custom hook
 
 const DashboardDirecteur = () => {
    const [isSidebar, setIsSidebar] = useState(true); // Initialize isSidebar state
-   const { userInfo: { firstName, lastName, jobTitle } } = useUser(); // Get user information using the useUser hook
+   const { userInfo: { firstName, lastName, jobTitle, roles } } = useUser(); // Get user information using the useUser hook
+
+   const navigate = useNavigate();
+   
+   useEffect(() => {
+      !roles.includes('ROLE_DR') && navigate('/');
+   }, [])
 
    return (
       <div className="app">

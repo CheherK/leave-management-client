@@ -8,7 +8,6 @@ import { logout } from "../store/user/user.reducer"; // Import the logout action
 const RequireAuth = () => {
    const { userInfo } = useUser(); // Get user info from the custom hook
    const location = useLocation(); // Get the current location from React Router
-
    return (
       userInfo
          ? userInfo.isFirstLogin

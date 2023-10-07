@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Sidebar from "../components/sidebar.component"; // Import Sidebar component
 import Topbar from "../components/topbar.component"; // Import Topbar component
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import DEVELOPPEUR_ROUTES from '../constants/developpeur-routes'; // Import DEVELOPPEUR_ROUTES configuration
 import useUser from '../hooks/useUser'; // Import useUser hook
 
 const DashboardDeveloppeur = () => {
    const [isSidebar, setIsSidebar] = useState(true); // State to manage sidebar visibility
-   const { userInfo: {firstName, lastName, jobTitle} } = useUser(); // Fetch user information from the useUser hook
+   const { userInfo: { firstName, lastName, jobTitle, roles } } = useUser(); // Fetch user information from the useUser hook
 
+   const navigate = useNavigate();
+
+   useEffect(() => {
+      !roles.includes('ROLE_DEV') && navigate('/');
+   }, []);
    return (
       <div className="app">
          {/* Sidebar component */}
